@@ -1,0 +1,175 @@
+version: 2
+
+sources:
+  - name: raw
+    description: DW raw data
+    schema: public
+    database: bronze_csv
+    tables:
+      - name: airlines
+        description: Airlines
+        columns:
+          - name: carrier
+            description: Airline code
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: Airline name
+            tests:
+              - not_null
+
+      - name: airports
+        description: Airports
+        columns:
+          - name: faa
+            description: Airport FAA code
+            tests:
+              - unique
+              - not_null
+          - name: name
+            description: Airport name
+            tests:
+              - not_null
+          - name: latitude
+            tests:
+              - not_null
+          - name: longitude
+            tests:
+              - not_null
+          - name: altitude
+            tests:
+              - not_null
+          - name: timezone
+            tests:
+              - not_null
+          - name: dst
+            tests:
+              - not_null
+          - name: timezone_name
+            tests:
+              - not_null
+
+      - name: planes
+        description: Planes
+        columns:
+          - name: tailnum
+            description: Plane tailnum identifier
+            tests:
+              - unique
+              - not_null
+          - name: year
+            description: Plane built year
+          - name: type
+            tests:
+              - not_null
+          - name: manufacturer
+            tests:
+              - not_null
+          - name: model
+            tests:
+              - not_null
+          - name: engines
+            tests:
+              - not_null
+          - name: seats
+            tests:
+              - not_null
+          - name: speed
+          - name: engine
+            tests:
+              - not_null
+
+      - name: weather
+        description: Hourly weather at origin airports
+        columns:
+          - name: origin
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'airports')
+                  field: faa
+          - name: year
+            tests:
+              - not_null
+          - name: month
+            tests:
+              - not_null
+          - name: day
+            tests:
+              - not_null
+          - name: hour
+            tests:
+              - not_null
+          - name: temp
+          - name: dewp
+          - name: humid
+          - name: wind_dir
+          - name: wind_speed
+          - name: wind_gust
+          - name: precip
+          - name: pressure
+          - name: visib
+          - name: time_hour
+            tests:
+              - not_null
+
+      - name: flights
+        description: Flights history
+        columns:
+          - name: carrier
+            tests:
+              - relationships:
+                  to: source('raw', 'airlines')
+                  field: carrier
+          - name: flight
+            tests:
+              - not_null
+          - name: year
+            tests:
+              - not_null
+          - name: month
+            tests:
+              - not_null
+          - name: day
+            tests:
+              - not_null
+          - name: hour
+            tests:
+              - not_null
+          - name: minute
+            tests:
+              - not_null
+          - name: actual_dep_time
+          - name: sched_dep_time
+          - name: dep_delay
+          - name: actual_arr_time
+          - name: sched_arr_time
+          - name: arr_delay
+          - name: tailnum
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'planes')
+                  field: tailnum
+          - name: origin
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'airports')
+                  field: faa
+          - name: dest
+            tests:
+              - not_null
+              - relationships:
+                  to: source('raw', 'airports')
+                  field: faa
+          - name: air_time
+            tests:
+              - not_null
+          - name: distance
+            tests:
+              - not_null
+          - name: time_hour
+            tests:
+              - not_null

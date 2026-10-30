@@ -1,0 +1,14 @@
+nyxa:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5432
+      user: de_challenge
+      password: "Password1234**"
+      dbname: dw_flights
+      schema: public
+      threads: 4
+
+      
